@@ -129,8 +129,8 @@ func process(buf []byte) {
 					// Debug("<< NEW REQUEST ID: ", s_elem)
 				}
 			}
-			Debug("Status: ", string(proto.Status(payload)))
 		}
+		Debug("Status: ", string(proto.Status(payload)))
 	}
 }
 
