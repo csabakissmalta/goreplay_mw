@@ -66,7 +66,7 @@ func create_cookie_value_from_list(lst []string) string {
 		// append(raw, strings.Split(v, ";")[0])
 		raw = append(raw, strings.Split(v, ";")[0])
 	}
-	res := strings.Join(raw, ";")
+	res := strings.Join(raw, "; ")
 	return res
 }
 
@@ -97,14 +97,13 @@ func process(buf []byte) {
 				resp := get_session_id_from_cookie(ele)
 				resp = strings.TrimRight(resp, "\n")
 				for _, val := range sessionIDs {
-					old := strings.TrimRight(val.old, "\n")
-					if strings.Compare(old, resp) == 0 {
+					if strings.Compare(val.old, resp) == 0 {
 						// Debug("- - -")
 						new_cookie := create_cookie_value_from_list(val.new)
 						proto.SetHeader(payload, []byte("Cookie"), []byte(new_cookie))
 						buf = append(buf[:headerSize], payload...)
 						Debug("- - -", new_cookie)
-						//
+						os.Stdout.Write(encode(buf))
 					}
 				}
 			}
@@ -136,7 +135,6 @@ func process(buf []byte) {
 		Debug("Status: ", string(proto.Status(payload)))
 		// os.Stdout.Write(encode(buf))
 	}
-	os.Stdout.Write(encode(buf))
 }
 
 // --------------------------------------------------------------------------
