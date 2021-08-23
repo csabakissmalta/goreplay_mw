@@ -126,7 +126,7 @@ func process(buf []byte) {
 				if key == "Set-Cookie" {
 					s_elem.new = ele
 					sessionIDs[reqID] = s_elem
-					Debug("<< NEW REQUEST ID: ", string(reqID))
+					Debug("<< NEW REQUEST ID: ", s_elem)
 				}
 			}
 			Debug("Status: ", string(proto.Status(payload)))
