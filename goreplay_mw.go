@@ -100,7 +100,7 @@ func process(buf []byte) {
 							// Debug("- - -")
 							new_cookie := create_cookie_value_from_list(val.new)
 							proto.SetHeader(payload, []byte("Cookie"), []byte(new_cookie))
-							buf = append(buf[:headerSize], payload...)
+							buf = append(buf[headerSize:], payload...)
 							Debug("- - -", new_cookie)
 						}
 					}
