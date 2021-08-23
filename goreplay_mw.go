@@ -82,7 +82,7 @@ func process(buf []byte) {
 	hs := proto.ParseHeaders(payload)
 
 	req_path := proto.Path(payload)
-	os.Stdout.Write(encode(buf))
+
 	// body := proto.Body(payload)
 
 	switch payloadType {
