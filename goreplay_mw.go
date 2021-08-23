@@ -99,8 +99,8 @@ func process(buf []byte) {
 						if strings.Compare(val.old, resp) == 0 {
 							// Debug("- - -")
 							new_cookie := create_cookie_value_from_list(val.new)
-							proto.SetHeader(payload, []byte("Cookie"), []byte(new_cookie))
-							buf = append(buf[headerSize:], payload...)
+							payload = proto.SetHeader(payload, []byte("Cookie"), []byte(new_cookie))
+							buf = append(buf[:headerSize], payload...)
 							Debug("- - -", new_cookie)
 						}
 					}
