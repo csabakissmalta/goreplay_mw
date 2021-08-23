@@ -107,6 +107,7 @@ func process(buf []byte) {
 				}
 			}
 		}
+
 	case '2':
 		// Debug("ORIG_REQUEST ID: ", string(reqID))
 		if s_elem, ok := sessionIDs[reqID]; ok {
