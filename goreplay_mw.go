@@ -114,11 +114,10 @@ func process(buf []byte) {
 					resp := get_session_id(ele)
 					s_elem.old = resp
 					sessionIDs[reqID] = s_elem
-					Debug(">> ORIG REQUEST ID: ", s_elem)
+					// Debug(">> ORIG REQUEST ID: ", s_elem)
 				}
 			}
 		}
-		os.Stdout.Write(encode(buf))
 	case '3':
 		// Debug("REPLAY reqID: ", reqID)
 		if s_elem, ok := sessionIDs[reqID]; ok {
@@ -126,7 +125,7 @@ func process(buf []byte) {
 				if key == "Set-Cookie" {
 					s_elem.new = ele
 					sessionIDs[reqID] = s_elem
-					Debug("<< NEW REQUEST ID: ", s_elem)
+					// Debug("<< NEW REQUEST ID: ", s_elem)
 				}
 			}
 			Debug("Status: ", string(proto.Status(payload)))
