@@ -114,7 +114,7 @@ func process(buf []byte) {
 					resp := get_session_id(ele)
 					s_elem.old = resp
 					sessionIDs[reqID] = s_elem
-					Debug(">> ORIG REQUEST ID: ", string(reqID))
+					Debug(">> ORIG REQUEST ID: ", s_elem)
 				}
 			}
 		}
