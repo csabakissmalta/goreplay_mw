@@ -98,7 +98,7 @@ func process(buf []byte) {
 				for _, val := range sessionIDs {
 					old := strings.TrimRight(val.old, "\n")
 					if strings.Compare(old, resp) == 0 {
-						Debug("- - -")
+						// Debug("- - -")
 						new_cookie := create_cookie_value_from_list(val.new)
 						proto.SetHeader(payload, []byte("Cookie"), []byte(new_cookie))
 						buf = append(buf[:headerSize], payload...)
@@ -128,7 +128,7 @@ func process(buf []byte) {
 					sessionIDs[reqID] = s_elem
 				}
 			}
-			// Debug("Status: ", string(proto.Status(payload)))
+			Debug("Status: ", string(proto.Status(payload)))
 		}
 	}
 }
