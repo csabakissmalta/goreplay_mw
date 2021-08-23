@@ -102,12 +102,11 @@ func process(buf []byte) {
 						new_cookie := create_cookie_value_from_list(val.new)
 						proto.SetHeader(payload, []byte("Cookie"), []byte(new_cookie))
 						buf = append(buf[:headerSize], payload...)
-						os.Stdout.Write(encode(buf))
 					}
 				}
 			}
 		}
-
+		os.Stdout.Write(encode(buf))
 	case '2':
 		if s_elem, ok := sessionIDs[reqID]; ok {
 			for key, ele := range hs {
@@ -121,7 +120,7 @@ func process(buf []byte) {
 		}
 		os.Stdout.Write(encode(buf))
 	case '3':
-		Debug("REPLAY reqID: ", reqID)
+		// Debug("REPLAY reqID: ", reqID)
 		if s_elem, ok := sessionIDs[reqID]; ok {
 			for key, ele := range hs {
 				if key == "Set-Cookie" {
