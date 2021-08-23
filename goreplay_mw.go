@@ -104,7 +104,7 @@ func process(buf []byte) {
 						proto.SetHeader(payload, []byte("Cookie"), []byte(new_cookie))
 						buf = append(buf[:headerSize], payload...)
 						Debug("- - -", new_cookie)
-						// os.Stdout.Write(encode(buf))
+						//
 					}
 				}
 			}
@@ -136,6 +136,7 @@ func process(buf []byte) {
 		Debug("Status: ", string(proto.Status(payload)))
 		// os.Stdout.Write(encode(buf))
 	}
+	os.Stdout.Write(encode(buf))
 }
 
 // --------------------------------------------------------------------------
