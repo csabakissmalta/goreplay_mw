@@ -95,7 +95,6 @@ func process(buf []byte) {
 		for _, val := range sessionIDs {
 			if strings.TrimSpace(val.old) == strings.TrimSpace(resp) {
 				new_cookie := create_cookie_value_from_list(val.new)
-				// Debug("=> ", val.new)
 				payload = proto.SetHeader(payload, []byte("Cookie"), []byte(new_cookie))
 				buf = append(buf[:headerSize], payload...)
 				os.Stdout.Write(encode(buf))
@@ -105,29 +104,27 @@ func process(buf []byte) {
 		if s_elem, ok := sessionIDs[reqID]; ok {
 			for key, ele := range hs {
 				if key == "Set-Cookie" {
-					// Debug(key, ele)
 					resp := get_session_id(ele)
 					s_elem.old = resp
 					sessionIDs[reqID] = s_elem
-					// Debug(">> ORIG REQUEST ID: ", s_elem)
 				}
 			}
 		}
 		os.Stdout.Write(encode(buf))
 	case '3':
-		// Debug("REPLAY reqID: ", reqID)
 		if s_elem, ok := sessionIDs[reqID]; ok {
 			for key, ele := range hs {
 				if key == "Set-Cookie" {
 					s_elem.new = []string(ele)
-					// Debug("<< NEW REQUEST ID: ", s_elem.new)
 					sessionIDs[reqID] = s_elem
-					Debug("<< NEW REQUEST ID: ", sessionIDs[reqID])
 				}
 			}
 		}
-		Debug("Status: ", string(proto.Status(payload)))
-		// os.Stdout.Write(encode(buf))
+		// Debug("Status: ", string(proto.Status(payload)))
+		status := string(proto.Status(payload))
+		if status == "400" || status == "404" {
+			Debug("BAD, BAD, BAD: ", status)
+		}
 	}
 }
 
