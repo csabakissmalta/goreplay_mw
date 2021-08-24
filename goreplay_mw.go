@@ -91,21 +91,22 @@ func process(buf []byte) {
 			sessionIDs[reqID] = *new(old_to_new)
 			// Debug(string(body))
 		} else {
-			for key, ele := range hs {
-				if strings.Compare(key, "Cookie") == 0 {
-					resp := get_session_id_from_cookie(ele)
-					resp = strings.TrimRight(resp, "\n")
-					for _, val := range sessionIDs {
-						if strings.Compare(val.old, resp) == 0 {
-							// Debug("- - -")
-							new_cookie := create_cookie_value_from_list(val.new)
-							payload = proto.SetHeader(payload, []byte("Cookie"), []byte(new_cookie))
-							buf = append(buf[:headerSize], payload...)
-							Debug("- - -", new_cookie)
-						}
-					}
+			ele := proto.Header(payload, []byte("Cookie"))
+			// for key, ele := range hs {
+			// if strings.Compare(key, "Cookie") == 0 {
+			resp := get_session_id_from_cookie([]string{string(ele)})
+			Debug("OLD_COOKIE", resp)
+			for _, val := range sessionIDs {
+				if strings.Compare(val.old, resp) == 0 {
+					// Debug("- - -")
+					new_cookie := create_cookie_value_from_list(val.new)
+					payload = proto.SetHeader(payload, []byte("Cookie"), []byte(new_cookie))
+					buf = append(buf[:headerSize], payload...)
+					Debug("- - -", new_cookie)
 				}
 			}
+			// }
+			// }
 		}
 		os.Stdout.Write(encode(buf))
 	case '2':
