@@ -99,7 +99,7 @@ func process(buf []byte) {
 
 			for _, val := range sessionIDs {
 				// Debug("SESSION_IDs: ", val.old)
-				if strings.Compare(string(val.old), string(resp)) == 0 {
+				if val.old == resp {
 					Debug("- - -")
 					new_cookie := create_cookie_value_from_list(val.new)
 					payload = proto.SetHeader(payload, []byte("Cookie"), []byte(new_cookie))
