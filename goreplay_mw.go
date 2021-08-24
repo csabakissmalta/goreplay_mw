@@ -92,7 +92,7 @@ func process(buf []byte) {
 		for _, val := range sessionIDs {
 			if strings.TrimSpace(val.old) == strings.TrimSpace(resp) {
 				new_cookie := create_cookie_value_from_list(val.new)
-				Debug("=> ", new_cookie)
+				Debug("=> ", val.new)
 				payload = proto.SetHeader(payload, []byte("Cookie"), []byte(new_cookie))
 				buf = append(buf[:headerSize], payload...)
 				os.Stdout.Write(encode(buf))
