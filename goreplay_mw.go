@@ -101,7 +101,7 @@ func process(buf []byte) {
 				Debug(val.old)
 				Debug(resp)
 				Debug("------")
-				if val.old == resp {
+				if strings.TrimSpace(val.old) == strings.TrimSpace(resp) {
 					Debug("- - -")
 					new_cookie := create_cookie_value_from_list(val.new)
 					payload = proto.SetHeader(payload, []byte("Cookie"), []byte(new_cookie))
