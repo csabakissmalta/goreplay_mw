@@ -104,6 +104,10 @@ func process(buf []byte) {
 		}
 	case '2':
 		if s_elem, ok := sessionIDs[reqID]; ok {
+			if s_elem.old != "" {
+				return
+			}
+
 			for key, ele := range hs {
 				if key == "Set-Cookie" {
 					resp := get_session_id(ele)
@@ -115,6 +119,10 @@ func process(buf []byte) {
 		os.Stdout.Write(encode(buf))
 	case '3':
 		if s_elem, ok := sessionIDs[reqID]; ok {
+			if len(s_elem.new) > 0 {
+				return
+			}
+
 			for key, ele := range hs {
 				if key == "Set-Cookie" {
 					s_elem.new = []string(ele)
