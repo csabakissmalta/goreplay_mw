@@ -97,7 +97,7 @@ func process(buf []byte) {
 			resp := get_session_id_from_cookie([]string{string(ele)})
 
 			for _, val := range sessionIDs {
-				Debug("SESSION_IDs: ", val.old)
+				// Debug("SESSION_IDs: ", val.old)
 				if strings.Compare(string(val.old), string(resp)) == 0 {
 					// Debug("- - -")
 					new_cookie := create_cookie_value_from_list(val.new)
