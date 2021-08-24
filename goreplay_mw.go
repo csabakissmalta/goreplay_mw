@@ -95,7 +95,7 @@ func process(buf []byte) {
 		for _, val := range sessionIDs {
 			if strings.TrimSpace(val.old) == strings.TrimSpace(resp) {
 				new_cookie := create_cookie_value_from_list(val.new)
-				Debug("=> ", val.new)
+				// Debug("=> ", val.new)
 				payload = proto.SetHeader(payload, []byte("Cookie"), []byte(new_cookie))
 				buf = append(buf[:headerSize], payload...)
 				os.Stdout.Write(encode(buf))
@@ -118,6 +118,7 @@ func process(buf []byte) {
 		if s_elem, ok := sessionIDs[reqID]; ok {
 			for key, ele := range hs {
 				if key == "Set-Cookie" {
+					Debug(ele)
 					s_elem.new = ele
 					sessionIDs[reqID] = s_elem
 					// Debug("<< NEW REQUEST ID: ", s_elem)
@@ -125,7 +126,7 @@ func process(buf []byte) {
 			}
 		}
 		Debug("Status: ", string(proto.Status(payload)))
-		// os.Stdout.Write(encode(buf))
+		os.Stdout.Write(encode(buf))
 	}
 }
 
