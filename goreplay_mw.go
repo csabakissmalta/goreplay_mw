@@ -104,8 +104,8 @@ func process(buf []byte) {
 	case '2':
 		if s_elem, ok := sessionIDs[reqID]; ok {
 			for key, ele := range hs {
-				Debug(key)
 				if key == "Set-Cookie" {
+					Debug(key, ele)
 					resp := get_session_id(ele)
 					s_elem.old = resp
 					sessionIDs[reqID] = s_elem
