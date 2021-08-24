@@ -87,30 +87,23 @@ func process(buf []byte) {
 
 	switch payloadType {
 	case '1':
-		if strings.Contains(string(req_path), "turboLogin") {
-			sessionIDs[reqID] = *new(old_to_new)
+		sessionIDs[reqID] = *new(old_to_new)
+		// if strings.Contains(string(req_path), "turboLogin") {
 
-			// Debug(string(body))
-		} else {
-			ele := proto.Header(payload, []byte("Cookie"))
-			// for key, ele := range hs {
-			// if strings.Compare(key, "Cookie") == 0 {
-			resp := get_session_id_from_cookie([]string{string(ele)})
+		// } else {
+		ele := proto.Header(payload, []byte("Cookie"))
+		resp := get_session_id_from_cookie([]string{string(ele)})
 
-			for _, val := range sessionIDs {
-				// Debug(val.old)
-				// Debug(resp)
-				// Debug("------")
-				if strings.TrimSpace(val.old) == strings.TrimSpace(resp) {
-					// Debug("- - -")
-					new_cookie := create_cookie_value_from_list(val.new)
-					payload = proto.SetHeader(payload, []byte("Cookie"), []byte(new_cookie))
-					buf = append(buf[:headerSize], payload...)
-				}
+		for _, val := range sessionIDs {
+			if strings.TrimSpace(val.old) == strings.TrimSpace(resp) {
+				new_cookie := create_cookie_value_from_list(val.new)
+				payload = proto.SetHeader(payload, []byte("Cookie"), []byte(new_cookie))
+				buf = append(buf[:headerSize], payload...)
 			}
-			// }
-			// }
 		}
+		// }
+		// }
+		// }
 		os.Stdout.Write(encode(buf))
 	case '2':
 		if s_elem, ok := sessionIDs[reqID]; ok {
