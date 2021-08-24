@@ -87,6 +87,8 @@ func process(buf []byte) {
 	case '1':
 		if _, ok := sessionIDs[reqID]; !ok {
 			sessionIDs[reqID] = *new(old_to_new)
+		} else {
+			return
 		}
 
 		ele := proto.Header(payload, []byte("Cookie"))
