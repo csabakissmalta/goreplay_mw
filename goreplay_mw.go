@@ -89,6 +89,7 @@ func process(buf []byte) {
 	case '1':
 		if strings.Contains(string(req_path), "turboLogin") {
 			sessionIDs[reqID] = *new(old_to_new)
+
 			// Debug(string(body))
 		} else {
 			ele := proto.Header(payload, []byte("Cookie"))
@@ -99,7 +100,7 @@ func process(buf []byte) {
 			for _, val := range sessionIDs {
 				// Debug("SESSION_IDs: ", val.old)
 				if strings.Compare(string(val.old), string(resp)) == 0 {
-					// Debug("- - -")
+					Debug("- - -")
 					new_cookie := create_cookie_value_from_list(val.new)
 					payload = proto.SetHeader(payload, []byte("Cookie"), []byte(new_cookie))
 					buf = append(buf[:headerSize], payload...)
