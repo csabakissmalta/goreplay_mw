@@ -126,6 +126,8 @@ func process(buf []byte) {
 		status := string(proto.Status(payload))
 		if status == "400" || status == "404" {
 			Debug("BAD, BAD, BAD: ", status)
+		} else {
+			Debug("ORRAJT: ", status)
 		}
 	}
 }
