@@ -2,13 +2,10 @@ package main
 
 import (
 	"bufio"
-	"bytes"
 	"encoding/hex"
 	"fmt"
 	"os"
 	"strings"
-
-	"github.com/buger/goreplay/proto"
 )
 
 type old_to_new struct {
@@ -72,14 +69,14 @@ func create_cookie_value_from_list(lst []string) string {
 
 func process(buf []byte) {
 	payloadType := buf[0]
-	headerSize := bytes.IndexByte(buf, '\n') + 1
-	header := buf[:headerSize-1]
+	// headerSize := bytes.IndexByte(buf, '\n') + 1
+	// header := buf[:headerSize-1]
 
-	meta := bytes.Split(header, []byte(" "))
-	reqID := string(meta[1])
-	payload := buf[headerSize:]
+	// meta := bytes.Split(header, []byte(" "))
+	// reqID := string(meta[1])
+	// payload := buf[headerSize:]
 
-	hs := proto.ParseHeaders(payload)
+	// hs := proto.ParseHeaders(payload)
 
 	// body := proto.Body(payload)
 
