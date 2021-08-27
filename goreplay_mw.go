@@ -102,6 +102,7 @@ func process(buf []byte) {
 				os.Stdout.Write(encode(buf))
 			}
 		}
+
 	case '2':
 		if s_elem, ok := sessionIDs[reqID]; ok {
 			for key, ele := range hs {
@@ -111,8 +112,8 @@ func process(buf []byte) {
 					sessionIDs[reqID] = s_elem
 				}
 			}
+			os.Stdout.Write(encode(buf))
 		}
-		// os.Stdout.Write(encode(buf))
 	case '3':
 		if s_elem, ok := sessionIDs[reqID]; ok {
 			for key, ele := range hs {
@@ -129,6 +130,8 @@ func process(buf []byte) {
 		} else {
 			Debug("ORRAJT: ", status)
 		}
+
+		os.Stdout.Write(encode(buf))
 	}
 }
 
