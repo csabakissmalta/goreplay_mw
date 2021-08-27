@@ -89,18 +89,23 @@ func process(buf []byte) {
 			sessionIDs[reqID] = *new(old_to_new)
 		}
 
-		ele := proto.Header(payload, []byte("Cookie"))
-		resp := get_session_id_from_cookie([]string{string(ele)})
+		for key, _ := range hs {
+			if key == "Cookie" {
+				ele := proto.Header(payload, []byte("Cookie"))
+				resp := get_session_id_from_cookie([]string{string(ele)})
 
-		for _, val := range sessionIDs {
-			if strings.TrimSpace(val.old) == strings.TrimSpace(resp) {
-				new_cookie := create_cookie_value_from_list(val.new)
-				payload = proto.SetHeader(payload, []byte("Cookie"), []byte(new_cookie))
-				buf = append(buf[:headerSize], payload...)
-				os.Stdout.Write(encode(buf))
-				return
+				for _, val := range sessionIDs {
+					if strings.TrimSpace(val.old) == strings.TrimSpace(resp) {
+						new_cookie := create_cookie_value_from_list(val.new)
+						payload = proto.SetHeader(payload, []byte("Cookie"), []byte(new_cookie))
+						buf = append(buf[:headerSize], payload...)
+						os.Stdout.Write(encode(buf))
+						return
+					}
+				}
 			}
 		}
+
 		Debug(">> REQUEST ------")
 		os.Stdout.Write(encode(buf))
 	case '2':
@@ -125,11 +130,7 @@ func process(buf []byte) {
 		}
 		// Debug("Status: ", string(proto.Status(payload)))
 		status := string(proto.Status(payload))
-		if status == "400" || status == "404" {
-			Debug("BAD, BAD, BAD: ", status)
-		}
-
-		Debug("::> REPLAY ------")
+		Debug("::> REPLAY STATUS: ", status)
 	}
 }
 
