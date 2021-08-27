@@ -111,7 +111,7 @@ func process(buf []byte) {
 			}
 		}
 		os.Stdout.Write(encode(buf))
-		Debug("ORIG")
+		// Debug("ORIG")
 	case '2':
 		if s_elem, ok := sessionIDs[reqID]; ok {
 			if _, ok := hs["Set-Cookie"]; ok {
@@ -125,14 +125,16 @@ func process(buf []byte) {
 			}
 		}
 		// os.Stdout.Write(encode(buf))
-		Debug("RESP")
+		// Debug("RESP")
 	case '3':
 		// status := string(proto.Status(payload))
 		if s_elem, ok := sessionIDs[reqID]; ok {
 			// if _, ok := hs["Set-Cookie"]; ok {
 			for key, ele := range hs {
+				Debug(key)
+				Debug("---")
 				if key == "Set-Cookie" {
-					Debug("REP REQID", sessionIDs[reqID], s_elem.old)
+					// Debug("REP REQID", sessionIDs[reqID], s_elem.old)
 					s_elem.new = []string(ele)
 					// Debug("REP", sessionIDs[reqID])
 					sessionIDs[reqID] = s_elem
@@ -141,7 +143,7 @@ func process(buf []byte) {
 			// }
 		}
 		// Debug("::> REPLAY STATUS: ", status)
-		Debug("REPLAY")
+		// Debug("REPLAY")
 	}
 }
 
