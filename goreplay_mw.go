@@ -91,6 +91,7 @@ func process(buf []byte) {
 		}
 
 		if _, ok := hs["Cookie"]; ok {
+			Debug("--- COOOOOKIE ---")
 			ele := proto.Header(payload, []byte("Cookie"))
 			resp := get_session_id_from_cookie([]string{string(ele)})
 
