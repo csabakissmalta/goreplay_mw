@@ -112,7 +112,7 @@ func process(buf []byte) {
 				}
 			}
 		}
-		os.Stdout.Write(encode(buf))
+		// os.Stdout.Write(encode(buf))
 	case '3':
 		if s_elem, ok := sessionIDs[reqID]; ok {
 			for key, ele := range hs {
