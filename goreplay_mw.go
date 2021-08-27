@@ -129,9 +129,8 @@ func process(buf []byte) {
 	case '3':
 		// status := string(proto.Status(payload))
 		if s_elem, ok := sessionIDs[reqID]; ok {
-			Debug("REP REQID", sessionIDs[reqID])
 			if _, ok := hs["Set-Cookie"]; ok {
-
+				Debug("REP REQID", sessionIDs[reqID], s_elem.old)
 				for key, ele := range hs {
 					if key == "Set-Cookie" {
 						s_elem.new = []string(ele)
