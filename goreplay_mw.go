@@ -79,7 +79,7 @@ func process(buf []byte) {
 	reqID := string(meta[1])
 	payload := buf[headerSize:]
 
-	// hs := proto.ParseHeaders(payload)
+	hs := proto.ParseHeaders(payload)
 
 	// body := proto.Body(payload)
 
@@ -102,19 +102,19 @@ func process(buf []byte) {
 				// os.Stdout.Write(encode(buf))
 			}
 		}
-		Debug(">> REQUEST")
+		Debug(">> REQUEST ------")
 		os.Stdout.Write(encode(buf))
 	case '2':
-		// if s_elem, ok := sessionIDs[reqID]; ok {
-		// 	for key, ele := range hs {
-		// 		if key == "Set-Cookie" {
-		// 			resp := get_session_id(ele)
-		// 			s_elem.old = resp
-		// 			sessionIDs[reqID] = s_elem
-		// 		}
-		// 	}
-		// }
-		Debug("<< ORIG RESPONSE")
+		if s_elem, ok := sessionIDs[reqID]; ok {
+			for key, ele := range hs {
+				if key == "Set-Cookie" {
+					resp := get_session_id(ele)
+					s_elem.old = resp
+					sessionIDs[reqID] = s_elem
+				}
+			}
+		}
+		Debug("<< ORIG RESPONSE ------")
 	case '3':
 		// if s_elem, ok := sessionIDs[reqID]; ok {
 		// 	for key, ele := range hs {
@@ -131,7 +131,7 @@ func process(buf []byte) {
 		// } else {
 		// 	Debug("ORRAJT: ", status)
 		// }
-		Debug("::> REPLAY")
+		Debug("::> REPLAY ------")
 	}
 }
 
