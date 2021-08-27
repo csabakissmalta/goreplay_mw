@@ -85,11 +85,11 @@ func process(buf []byte) {
 
 	switch payloadType {
 	case '1':
-		if _, ok := sessionIDs[reqID]; !ok {
-			sessionIDs[reqID] = *new(old_to_new)
-		}
-
 		if _, ok := hs["Cookie"]; ok {
+			if _, ok := sessionIDs[reqID]; !ok {
+				sessionIDs[reqID] = *new(old_to_new)
+			}
+
 			ele := proto.Header(payload, []byte("Cookie"))
 			resp := get_session_id_from_cookie([]string{string(ele)})
 
@@ -117,7 +117,7 @@ func process(buf []byte) {
 				}
 			}
 		}
-		os.Stdout.Write(encode(buf))
+		// os.Stdout.Write(encode(buf))
 		Debug("RESP")
 	case '3':
 		// status := string(proto.Status(payload))
