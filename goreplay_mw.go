@@ -2,10 +2,13 @@ package main
 
 import (
 	"bufio"
+	"bytes"
 	"encoding/hex"
 	"fmt"
 	"os"
 	"strings"
+
+	"github.com/buger/goreplay/proto"
 )
 
 type old_to_new struct {
@@ -69,64 +72,64 @@ func create_cookie_value_from_list(lst []string) string {
 
 func process(buf []byte) {
 	payloadType := buf[0]
-	// headerSize := bytes.IndexByte(buf, '\n') + 1
-	// header := buf[:headerSize-1]
+	headerSize := bytes.IndexByte(buf, '\n') + 1
+	header := buf[:headerSize-1]
 
-	// meta := bytes.Split(header, []byte(" "))
-	// reqID := string(meta[1])
-	// payload := buf[headerSize:]
+	meta := bytes.Split(header, []byte(" "))
+	reqID := string(meta[1])
+	payload := buf[headerSize:]
 
-	// hs := proto.ParseHeaders(payload)
+	hs := proto.ParseHeaders(payload)
 
 	// body := proto.Body(payload)
 
 	switch payloadType {
 	case '1':
-		// if _, ok := sessionIDs[reqID]; !ok {
-		// 	sessionIDs[reqID] = *new(old_to_new)
-		// }
+		if _, ok := sessionIDs[reqID]; !ok {
+			sessionIDs[reqID] = *new(old_to_new)
+		}
 
-		// if _, ok := hs["Cookie"]; ok {
-		// 	ele := proto.Header(payload, []byte("Cookie"))
-		// 	resp := get_session_id_from_cookie([]string{string(ele)})
+		if _, ok := hs["Cookie"]; ok {
+			ele := proto.Header(payload, []byte("Cookie"))
+			resp := get_session_id_from_cookie([]string{string(ele)})
 
-		// 	for _, val := range sessionIDs {
-		// 		if strings.TrimSpace(val.old) == strings.TrimSpace(resp) {
-		// 			new_cookie := create_cookie_value_from_list(val.new)
-		// 			Debug("NJU KOOKI: ", new_cookie)
-		// 			payload = proto.SetHeader(payload, []byte("Cookie"), []byte(new_cookie))
-		// 			buf = append(buf[:headerSize], payload...)
-		// 			// Debug("REQ", new_cookie, val.new)
-		// 			os.Stdout.Write(encode(buf))
-		// 			return
-		// 		}
-		// 	}
-		// }
+			for _, val := range sessionIDs {
+				if strings.TrimSpace(val.old) == strings.TrimSpace(resp) {
+					new_cookie := create_cookie_value_from_list(val.new)
+					Debug("NJU KOOKI: ", new_cookie)
+					payload = proto.SetHeader(payload, []byte("Cookie"), []byte(new_cookie))
+					buf = append(buf[:headerSize], payload...)
+					// Debug("REQ", new_cookie, val.new)
+					os.Stdout.Write(encode(buf))
+					return
+				}
+			}
+		}
 		os.Stdout.Write(encode(buf))
 		Debug("ORIG")
 	case '2':
-		// if s_elem, ok := sessionIDs[reqID]; ok {
-		// 	for key, ele := range hs {
-		// 		if key == "Set-Cookie" {
-		// 			resp := get_session_id(ele)
-		// 			s_elem.old = resp
-		// 			sessionIDs[reqID] = s_elem
-		// 		}
-		// 	}
-		// }
+		if s_elem, ok := sessionIDs[reqID]; ok {
+			for key, ele := range hs {
+				if key == "Set-Cookie" {
+					resp := get_session_id(ele)
+					s_elem.old = resp
+					sessionIDs[reqID] = s_elem
+				}
+			}
+		}
 		os.Stdout.Write(encode(buf))
 		Debug("RESP")
 	case '3':
 		// status := string(proto.Status(payload))
-		// if s_elem, ok := sessionIDs[reqID]; ok {
-		// 	for key, ele := range hs {
-		// 		if key == "Set-Cookie" {
-		// 			s_elem.new = []string(ele)
-		// 			Debug("REP", sessionIDs[reqID])
-		// 			sessionIDs[reqID] = s_elem
-		// 		}
-		// 	}
-		// }
+		if s_elem, ok := sessionIDs[reqID]; ok {
+			for key, ele := range hs {
+				if key == "Set-Cookie" {
+					s_elem.new = []string(ele)
+					Debug("REP", sessionIDs[reqID])
+					sessionIDs[reqID] = s_elem
+				}
+			}
+		}
 		// Debug("::> REPLAY STATUS: ", status)
 		Debug("REPLAY")
 	}
