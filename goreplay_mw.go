@@ -85,50 +85,52 @@ func process(buf []byte) {
 
 	switch payloadType {
 	case '1':
-		if _, ok := sessionIDs[reqID]; !ok {
-			sessionIDs[reqID] = *new(old_to_new)
-		} else {
-			return
-		}
+		// if _, ok := sessionIDs[reqID]; !ok {
+		// 	sessionIDs[reqID] = *new(old_to_new)
+		// } else {
+		// 	return
+		// }
 
-		ele := proto.Header(payload, []byte("Cookie"))
-		resp := get_session_id_from_cookie([]string{string(ele)})
+		// ele := proto.Header(payload, []byte("Cookie"))
+		// resp := get_session_id_from_cookie([]string{string(ele)})
 
-		for _, val := range sessionIDs {
-			if strings.TrimSpace(val.old) == strings.TrimSpace(resp) {
-				new_cookie := create_cookie_value_from_list(val.new)
-				payload = proto.SetHeader(payload, []byte("Cookie"), []byte(new_cookie))
-				buf = append(buf[:headerSize], payload...)
-				os.Stdout.Write(encode(buf))
-			}
-		}
-
+		// for _, val := range sessionIDs {
+		// 	if strings.TrimSpace(val.old) == strings.TrimSpace(resp) {
+		// 		new_cookie := create_cookie_value_from_list(val.new)
+		// 		payload = proto.SetHeader(payload, []byte("Cookie"), []byte(new_cookie))
+		// 		buf = append(buf[:headerSize], payload...)
+		// 		os.Stdout.Write(encode(buf))
+		// 	}
+		// }
+		Debug(">> REQUEST")
 	case '2':
-		if s_elem, ok := sessionIDs[reqID]; ok {
-			for key, ele := range hs {
-				if key == "Set-Cookie" {
-					resp := get_session_id(ele)
-					s_elem.old = resp
-					sessionIDs[reqID] = s_elem
-				}
-			}
-		}
+		// if s_elem, ok := sessionIDs[reqID]; ok {
+		// 	for key, ele := range hs {
+		// 		if key == "Set-Cookie" {
+		// 			resp := get_session_id(ele)
+		// 			s_elem.old = resp
+		// 			sessionIDs[reqID] = s_elem
+		// 		}
+		// 	}
+		// }
+		Debug("<< ORIG RESPONSE")
 	case '3':
-		if s_elem, ok := sessionIDs[reqID]; ok {
-			for key, ele := range hs {
-				if key == "Set-Cookie" {
-					s_elem.new = []string(ele)
-					sessionIDs[reqID] = s_elem
-				}
-			}
-		}
-		// Debug("Status: ", string(proto.Status(payload)))
-		status := string(proto.Status(payload))
-		if status == "400" || status == "404" {
-			Debug("BAD, BAD, BAD: ", status)
-		} else {
-			Debug("ORRAJT: ", status)
-		}
+		// if s_elem, ok := sessionIDs[reqID]; ok {
+		// 	for key, ele := range hs {
+		// 		if key == "Set-Cookie" {
+		// 			s_elem.new = []string(ele)
+		// 			sessionIDs[reqID] = s_elem
+		// 		}
+		// 	}
+		// }
+		// // Debug("Status: ", string(proto.Status(payload)))
+		// status := string(proto.Status(payload))
+		// if status == "400" || status == "404" {
+		// 	Debug("BAD, BAD, BAD: ", status)
+		// } else {
+		// 	Debug("ORRAJT: ", status)
+		// }
+		Debug("::> REPLAY")
 	}
 }
 
