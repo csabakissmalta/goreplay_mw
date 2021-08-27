@@ -93,17 +93,20 @@ func process(buf []byte) {
 			ele := proto.Header(payload, []byte("Cookie"))
 			resp := get_session_id_from_cookie([]string{string(ele)})
 
-			for _, val := range sessionIDs {
-				if strings.TrimSpace(val.old) == strings.TrimSpace(resp) {
-					new_cookie := create_cookie_value_from_list(val.new)
-					Debug("NJU KOOKI: ", new_cookie)
-					payload = proto.SetHeader(payload, []byte("Cookie"), []byte(new_cookie))
-					buf = append(buf[:headerSize], payload...)
-					// Debug("REQ", new_cookie, val.new)
-					os.Stdout.Write(encode(buf))
-					return
-				}
-			}
+			Debug("ele: ", ele)
+			Debug("resp: ", resp)
+
+			// for _, val := range sessionIDs {
+			// 	if strings.TrimSpace(val.old) == strings.TrimSpace(resp) {
+			// 		new_cookie := create_cookie_value_from_list(val.new)
+
+			// 		payload = proto.SetHeader(payload, []byte("Cookie"), []byte(new_cookie))
+			// 		buf = append(buf[:headerSize], payload...)
+			// 		// Debug("REQ", new_cookie, val.new)
+			// 		os.Stdout.Write(encode(buf))
+			// 		return
+			// 	}
+			// }
 		}
 		os.Stdout.Write(encode(buf))
 		Debug("ORIG")
