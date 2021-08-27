@@ -112,7 +112,6 @@ func process(buf []byte) {
 					sessionIDs[reqID] = s_elem
 				}
 			}
-			os.Stdout.Write(encode(buf))
 		}
 	case '3':
 		if s_elem, ok := sessionIDs[reqID]; ok {
@@ -130,8 +129,6 @@ func process(buf []byte) {
 		} else {
 			Debug("ORRAJT: ", status)
 		}
-
-		os.Stdout.Write(encode(buf))
 	}
 }
 
