@@ -125,13 +125,14 @@ func process(buf []byte) {
 				if key == "Set-Cookie" {
 					s_elem.new = []string(ele)
 					sessionIDs[reqID] = s_elem
+					Debug(sessionIDs[reqID])
 				}
 			}
 		}
-		// Debug("Status: ", string(proto.Status(payload)))
-		status := string(proto.Status(payload))
-		Debug("::> REPLAY STATUS: ", status)
 	}
+	// Debug("Status: ", string(proto.Status(payload)))
+	status := string(proto.Status(payload))
+	Debug("::> REPLAY STATUS: ", status)
 }
 
 // --------------------------------------------------------------------------
