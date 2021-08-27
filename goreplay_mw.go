@@ -2,10 +2,13 @@ package main
 
 import (
 	"bufio"
+	"bytes"
 	"encoding/hex"
 	"fmt"
 	"os"
 	"strings"
+
+	"github.com/buger/goreplay/proto"
 )
 
 type old_to_new struct {
@@ -69,12 +72,12 @@ func create_cookie_value_from_list(lst []string) string {
 
 func process(buf []byte) {
 	payloadType := buf[0]
-	// headerSize := bytes.IndexByte(buf, '\n') + 1
-	// header := buf[:headerSize-1]
+	headerSize := bytes.IndexByte(buf, '\n') + 1
+	header := buf[:headerSize-1]
 
-	// meta := bytes.Split(header, []byte(" "))
-	// reqID := string(meta[1])
-	// payload := buf[headerSize:]
+	meta := bytes.Split(header, []byte(" "))
+	reqID := string(meta[1])
+	payload := buf[headerSize:]
 
 	// hs := proto.ParseHeaders(payload)
 
@@ -82,23 +85,23 @@ func process(buf []byte) {
 
 	switch payloadType {
 	case '1':
-		// if _, ok := sessionIDs[reqID]; !ok {
-		// 	sessionIDs[reqID] = *new(old_to_new)
-		// } else {
-		// 	return
-		// }
+		if _, ok := sessionIDs[reqID]; !ok {
+			sessionIDs[reqID] = *new(old_to_new)
+		} else {
+			return
+		}
 
-		// ele := proto.Header(payload, []byte("Cookie"))
-		// resp := get_session_id_from_cookie([]string{string(ele)})
+		ele := proto.Header(payload, []byte("Cookie"))
+		resp := get_session_id_from_cookie([]string{string(ele)})
 
-		// for _, val := range sessionIDs {
-		// 	if strings.TrimSpace(val.old) == strings.TrimSpace(resp) {
-		// 		new_cookie := create_cookie_value_from_list(val.new)
-		// 		payload = proto.SetHeader(payload, []byte("Cookie"), []byte(new_cookie))
-		// 		buf = append(buf[:headerSize], payload...)
-		// 		os.Stdout.Write(encode(buf))
-		// 	}
-		// }
+		for _, val := range sessionIDs {
+			if strings.TrimSpace(val.old) == strings.TrimSpace(resp) {
+				new_cookie := create_cookie_value_from_list(val.new)
+				payload = proto.SetHeader(payload, []byte("Cookie"), []byte(new_cookie))
+				buf = append(buf[:headerSize], payload...)
+				// os.Stdout.Write(encode(buf))
+			}
+		}
 		Debug(">> REQUEST")
 		os.Stdout.Write(encode(buf))
 	case '2':
