@@ -100,7 +100,7 @@ func process(buf []byte) {
 						new_cookie := create_cookie_value_from_list(val.new)
 						payload = proto.SetHeader(payload, []byte("Cookie"), []byte(new_cookie))
 						buf = append(buf[:headerSize], payload...)
-						Debug("REQ", new_cookie)
+						Debug("REQ", new_cookie, val.new)
 						os.Stdout.Write(encode(buf))
 						return
 					}
