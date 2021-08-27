@@ -94,6 +94,7 @@ func process(buf []byte) {
 			Debug("--- COOOOOKIE ---")
 			ele := proto.Header(payload, []byte("Cookie"))
 			resp := get_session_id_from_cookie([]string{string(ele)})
+			Debug(resp)
 
 			for _, val := range sessionIDs {
 				if strings.TrimSpace(val.old) == strings.TrimSpace(resp) {
