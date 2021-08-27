@@ -116,21 +116,21 @@ func process(buf []byte) {
 		}
 		Debug("<< ORIG RESPONSE ------")
 	case '3':
-		// if s_elem, ok := sessionIDs[reqID]; ok {
-		// 	for key, ele := range hs {
-		// 		if key == "Set-Cookie" {
-		// 			s_elem.new = []string(ele)
-		// 			sessionIDs[reqID] = s_elem
-		// 		}
-		// 	}
-		// }
-		// // Debug("Status: ", string(proto.Status(payload)))
-		// status := string(proto.Status(payload))
-		// if status == "400" || status == "404" {
-		// 	Debug("BAD, BAD, BAD: ", status)
-		// } else {
-		// 	Debug("ORRAJT: ", status)
-		// }
+		if s_elem, ok := sessionIDs[reqID]; ok {
+			for key, ele := range hs {
+				if key == "Set-Cookie" {
+					s_elem.new = []string(ele)
+					sessionIDs[reqID] = s_elem
+				}
+			}
+		}
+		// Debug("Status: ", string(proto.Status(payload)))
+		status := string(proto.Status(payload))
+		if status == "400" || status == "404" {
+			Debug("BAD, BAD, BAD: ", status)
+		} else {
+			Debug("ORRAJT: ", status)
+		}
 		Debug("::> REPLAY ------")
 	}
 }
