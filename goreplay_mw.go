@@ -124,8 +124,9 @@ func process(buf []byte) {
 		if s_elem, ok := sessionIDs[reqID]; ok {
 			for key, ele := range hs {
 				if key == "Set-Cookie" {
+					Debug("REP")
 					s_elem.new = []string(ele)
-					Debug("REP", sessionIDs[reqID])
+					// Debug("REP", sessionIDs[reqID])
 					sessionIDs[reqID] = s_elem
 				}
 			}
