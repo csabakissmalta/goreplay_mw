@@ -93,11 +93,10 @@ func process(buf []byte) {
 			ele := proto.Header(payload, []byte("Cookie"))
 			resp := get_session_id_from_cookie([]string{string(ele)})
 
-			Debug("ele: ", string(ele))
-			Debug("resp: ", resp)
-
 			for _, val := range sessionIDs {
 				if strings.TrimSpace(val.old) == strings.TrimSpace(resp) {
+					Debug("ele: ", string(ele))
+					Debug("resp: ", resp)
 					new_cookie := create_cookie_value_from_list(val.new)
 
 					payload = proto.SetHeader(payload, []byte("Cookie"), []byte(new_cookie))
