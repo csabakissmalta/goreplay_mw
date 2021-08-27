@@ -88,7 +88,9 @@ func process(buf []byte) {
 		if _, ok := sessionIDs[reqID]; !ok {
 			sessionIDs[reqID] = *new(old_to_new)
 			Debug(reqID)
-		} else {
+		}
+
+		if _, ok := hs["Cookie"]; ok {
 			ele := proto.Header(payload, []byte("Cookie"))
 			resp := get_session_id_from_cookie([]string{string(ele)})
 
@@ -103,7 +105,6 @@ func process(buf []byte) {
 				}
 			}
 		}
-
 		// for key, _ := range hs {
 		// if key == "Cookie" {
 
