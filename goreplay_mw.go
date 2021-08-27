@@ -120,6 +120,7 @@ func process(buf []byte) {
 		}
 		Debug("<< ORIG RESPONSE ------")
 	case '3':
+		status := string(proto.Status(payload))
 		if s_elem, ok := sessionIDs[reqID]; ok {
 			for key, ele := range hs {
 				if key == "Set-Cookie" {
@@ -129,10 +130,8 @@ func process(buf []byte) {
 				}
 			}
 		}
+		Debug("::> REPLAY STATUS: ", status)
 	}
-	// Debug("Status: ", string(proto.Status(payload)))
-	status := string(proto.Status(payload))
-	Debug("::> REPLAY STATUS: ", status)
 }
 
 // --------------------------------------------------------------------------
