@@ -100,6 +100,7 @@ func process(buf []byte) {
 		// 	}
 		// }
 		Debug(">> REQUEST")
+		os.Stdout.Write(encode(buf))
 	case '2':
 		// if s_elem, ok := sessionIDs[reqID]; ok {
 		// 	for key, ele := range hs {
