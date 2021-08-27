@@ -109,11 +109,13 @@ func process(buf []byte) {
 		Debug("ORIG")
 	case '2':
 		if s_elem, ok := sessionIDs[reqID]; ok {
-			for key, ele := range hs {
-				if key == "Set-Cookie" {
-					resp := get_session_id(ele)
-					s_elem.old = resp
-					sessionIDs[reqID] = s_elem
+			if _, ok := hs["Set-Cookie"]; ok {
+				for key, ele := range hs {
+					if key == "Set-Cookie" {
+						resp := get_session_id(ele)
+						s_elem.old = resp
+						sessionIDs[reqID] = s_elem
+					}
 				}
 			}
 		}
@@ -122,12 +124,14 @@ func process(buf []byte) {
 	case '3':
 		// status := string(proto.Status(payload))
 		if s_elem, ok := sessionIDs[reqID]; ok {
-			Debug("REP REQID", sessionIDs[reqID])
-			for key, ele := range hs {
-				if key == "Set-Cookie" {
-					s_elem.new = []string(ele)
-					// Debug("REP", sessionIDs[reqID])
-					sessionIDs[reqID] = s_elem
+			if _, ok := hs["Set-Cookie"]; ok {
+				Debug("REP REQID", sessionIDs[reqID])
+				for key, ele := range hs {
+					if key == "Set-Cookie" {
+						s_elem.new = []string(ele)
+						// Debug("REP", sessionIDs[reqID])
+						sessionIDs[reqID] = s_elem
+					}
 				}
 			}
 		}
